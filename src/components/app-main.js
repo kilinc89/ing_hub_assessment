@@ -10,8 +10,6 @@ export class AppMain extends LitElement {
         initRouter(routerOutlet);
     }
 
-
-
     static styles = css`
     /* Basic styling */
   `;

@@ -33,6 +33,8 @@ export class EmployeeForm extends LitElement {
     if (this.employeeId) {
       const state = store.getState();
       this.employee = state.employees.find(e => e.id === this.employeeId) || this.employee;
+
+      console.log(this.employee);
     }
 
     window.addEventListener('language-changed', () => {
@@ -44,7 +46,44 @@ export class EmployeeForm extends LitElement {
 
 
   static styles = css`
-    /* form styling */
+    form {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    input, select {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+    }
+
+    button {
+      grid-column: span 2;
+      background-color: #f60;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    button:hover {
+      background-color: #e55;
+    }
   `;
 
   updateField(e, field) {

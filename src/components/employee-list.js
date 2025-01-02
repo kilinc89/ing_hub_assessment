@@ -27,7 +27,38 @@ export class EmployeeList extends LitElement {
   }
 
   static styles = css`
-    /* basic styling for table/list, pagination, etc. */
+    body {
+      font-family: Arial, sans-serif;
+      color: #333;
+    }
+
+    button {
+      background-color: #f60;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e55;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
   `;
 
   get filteredEmployees() {
