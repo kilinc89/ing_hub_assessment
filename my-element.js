@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-import {LitElement, html, css} from 'lit';
+import { LitElement, html, css } from 'lit';
 
 /**
  * An example element.
@@ -31,13 +31,13 @@ export class MyElement extends LitElement {
        * The name to say "Hello" to.
        * @type {string}
        */
-      name: {type: String},
+      name: { type: String },
 
       /**
        * The number of times the button has been clicked.
        * @type {number}
        */
-      count: {type: Number},
+      count: { type: Number },
     };
   }
 
@@ -50,15 +50,24 @@ export class MyElement extends LitElement {
   render() {
     return html`
       <h1>${this.sayHello(this.name)}!</h1>
-      <button @click=${this._onClick} part="button">
-        Click Count: ${this.count}
+      <button @click=${this._onIncrease} part="button">
+        +
+      </button>
+      <span>Count: ${this.count}</span>
+      <button @click=${this._onDecrease} part="button">
+        -
       </button>
       <slot></slot>
     `;
   }
 
-  _onClick() {
+  _onIncrease() {
     this.count++;
+    this.dispatchEvent(new CustomEvent('count-changed'));
+  }
+
+  _onDecrease() {
+    this.count--;
     this.dispatchEvent(new CustomEvent('count-changed'));
   }
 
