@@ -5,45 +5,12 @@ import { t } from '../utils/i18n.js';
 import { Router } from '@vaadin/router';
 
 export class EmployeeForm extends LitElement {
+
+
   static properties = {
     employeeId: { type: String },
     employee: { type: Object }
   };
-
-  constructor() {
-    super();
-    this.employee = {
-      firstName: '',
-      lastName: '',
-      dateOfEmployment: '',
-      dateOfBirth: '',
-      phone: '',
-      email: '',
-      department: 'Analytics',
-      position: 'Junior'
-    };
-  }
-
-  // Called whenever the component is attached or route updates
-  connectedCallback() {
-    super.connectedCallback();
-    // If the route has an :id param, load that record
-    const params = (Router.location && Router.location.params) || {};
-    this.employeeId = params.id;
-    if (this.employeeId) {
-      const state = store.getState();
-      this.employee = state.employees.find(e => e.id === this.employeeId) || this.employee;
-
-      console.log(this.employee);
-    }
-
-    window.addEventListener('language-changed', () => {
-      console.log('language-changed');
-      this.requestUpdate();
-    });
-  }
-
-
 
   static styles = css`
     form {
@@ -86,36 +53,54 @@ export class EmployeeForm extends LitElement {
     }
   `;
 
+  constructor() {
+    super();
+    this.employee = {
+      firstName: '',
+      lastName: '',
+      dateOfEmployment: '',
+      dateOfBirth: '',
+      phone: '',
+      email: '',
+      department: 'Analytics',
+      position: 'Junior'
+    };
+  }
+
+  onBeforeEnter(location) {
+    const params = location.params;
+    this.employeeId = params.id;
+    if (this.employeeId) {
+      const state = store.getState();
+      this.employee = state.employees.find(e => e.id === this.employeeId) || this.employee;
+    }
+  }
+
+
+
   updateField(e, field) {
     this.employee = { ...this.employee, [field]: e.target.value };
   }
 
   async handleSubmit(e) {
     e.preventDefault();
-    // Basic validations
     if (!this.employee.firstName || !this.employee.lastName) {
       alert('Please fill required fields.');
       return;
     }
 
-    // Confirm user action
     const confirmed = window.confirm(`${t('actions.confirm')}`);
     if (!confirmed) return;
 
     if (this.employeeId) {
-      // Editing existing
       store.dispatch(updateEmployee({ ...this.employee }));
     } else {
-      // Creating new
-      // Generate an ID (in real app, from backend)
       const newEmployee = { ...this.employee, id: Date.now().toString() };
       store.dispatch(addEmployee(newEmployee));
     }
 
-    Router.go('/list'); // navigate to list
+    Router.go('/list');
   }
-
-
 
   render() {
     return html`
@@ -157,7 +142,7 @@ export class EmployeeForm extends LitElement {
           type="text" 
           .value=${this.employee.phone} 
           @input=${(e) => this.updateField(e, 'phone')} 
-          pattern="^[+0-9\s\-()]+$"
+          pattern="^[+0-9\\s\\-()]+$"
         />
 
         <label>${t('labels.email')}</label>

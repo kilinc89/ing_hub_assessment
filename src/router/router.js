@@ -6,6 +6,7 @@ import '../components/employee-form.js';  // create/edit
 
 export const initRouter = (outlet) => {
     const router = new Router(outlet);
+
     router.setRoutes([
         { path: '/', component: 'employee-list' },
         { path: '/list', component: 'employee-list' },
