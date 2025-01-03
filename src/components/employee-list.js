@@ -69,6 +69,12 @@ export class EmployeeList extends LitElement {
       gap: 1rem;
       margin-top: 1rem;
     }
+
+    @media (max-width: 600px) {
+      .card-container {
+        grid-template-columns: 1fr;
+      }
+    }
   `;
 
   get filteredEmployees() {

@@ -2,7 +2,17 @@
 import { createStore } from 'redux';
 
 const initialState = {
-    employees: []
+    employees: Array.from({ length: 15 }, (_, i) => ({
+        id: i.toString(),
+        firstName: `Employee${i + 1}`,
+        lastName: `LastName${i + 1}`,
+        dateOfEmployment: '2023-01-01',
+        dateOfBirth: '1990-01-01',
+        phone: '123-456-7890',
+        email: `employee${i + 1}@example.com`,
+        department: 'Analytics',
+        position: 'Junior'
+    }))
 };
 
 function employeeReducer(state = initialState, action) {

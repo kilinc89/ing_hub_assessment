@@ -17,6 +17,7 @@ export class EmployeeCard extends LitElement {
       flex-direction: column;
       justify-content: space-between;
       height: 100%;
+      box-sizing: border-box;
     }
 
     .card-header {
