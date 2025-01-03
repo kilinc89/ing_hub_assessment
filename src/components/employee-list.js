@@ -3,6 +3,8 @@ import { LitElement, html, css } from 'lit';
 import { store } from '../store/store.js';
 import { t } from '../utils/i18n.js';
 import './pagination.js';
+import './employee-card.js';
+import './employee-table.js';
 
 export class EmployeeList extends LitElement {
   static properties = {
@@ -61,67 +63,11 @@ export class EmployeeList extends LitElement {
       background-color: #e55;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 12px;
-      text-align: left;
-    }
-
-    th {
-      background-color: #f9f9f9;
-      font-weight: bold;
-      color: #f60;
-    }
-
-    tr:nth-child(even) {
-      background-color: #f2f2f2;
-    }
-
     .card-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: 1rem;
       margin-top: 1rem;
-    }
-
-    .card {
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 1rem;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .card-header {
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-    }
-
-    .card-actions {
-      margin-top: 1rem;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .card-actions a, .card-actions button {
-      background-color: #f60;
-      color: white;
-      border: none;
-      padding: 0.5rem;
-      border-radius: 4px;
-      cursor: pointer;
-      text-decoration: none;
-      text-align: center;
-    }
-
-    .card-actions button:hover, .card-actions a:hover {
-      background-color: #e55;
     }
   `;
 
@@ -157,74 +103,6 @@ export class EmployeeList extends LitElement {
     }
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    window.addEventListener('language-changed', () => {
-      console.log('language-changed');
-      this.requestUpdate();
-    });
-  }
-
-  renderTable() {
-    return html`
-      <table>
-        <thead>
-          <tr>
-            <th>${t('labels.firstName')}</th>
-            <th>${t('labels.lastName')}</th>
-            <th>${t('labels.dateOfEmployment')}</th>
-            <th>${t('labels.dateOfBirth')}</th>
-            <th>${t('labels.phone')}</th>
-            <th>${t('labels.email')}</th>
-            <th>${t('labels.department')}</th>
-            <th>${t('labels.position')}</th>
-            <th>${t('actions.edit')}</th>
-            <th>${t('actions.delete')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${this.paginatedEmployees.map(emp => html`
-            <tr>
-              <td>${emp.firstName}</td>
-              <td>${emp.lastName}</td>
-              <td>${emp.dateOfEmployment}</td>
-              <td>${emp.dateOfBirth}</td>
-              <td>${emp.phone}</td>
-              <td>${emp.email}</td>
-              <td>${emp.department}</td>
-              <td>${emp.position}</td>
-              <td>
-                <a href="/edit/${emp.id}">${t('actions.edit')}</a>
-              </td>
-              <td>
-                <button @click=${() => this.deleteEmployee(emp)}>${t('actions.delete')}</button>
-              </td>
-            </tr>
-          `)}
-        </tbody>
-      </table>
-    `;
-  }
-
-  renderList() {
-    return html`
-      <div class="card-container">
-        ${this.paginatedEmployees.map(emp => html`
-          <div class="card">
-            <div class="card-header">${emp.firstName} ${emp.lastName}</div>
-            <div>${emp.department} - ${emp.position}</div>
-            <div>${emp.email}</div>
-            <div>${emp.phone}</div>
-            <div class="card-actions">
-              <a href="/edit/${emp.id}">${t('actions.edit')}</a>
-              <button @click=${() => this.deleteEmployee(emp)}>${t('actions.delete')}</button>
-            </div>
-          </div>
-        `)}
-      </div>
-    `;
-  }
-
   render() {
     return html`
       <div>
@@ -236,7 +114,13 @@ export class EmployeeList extends LitElement {
           </div>
         </div>
 
-        ${this.viewMode === 'table' ? this.renderTable() : this.renderList()}
+        ${this.viewMode === 'table'
+        ? html`<employee-table .employees=${this.paginatedEmployees} @delete-employee=${(e) => this.deleteEmployee(e.detail)}></employee-table>`
+        : html`<div class="card-container">
+                  ${this.paginatedEmployees.map(emp => html`
+                    <employee-card .employee=${emp} @delete-employee=${(e) => this.deleteEmployee(e.detail)}></employee-card>
+                  `)}
+                </div>`}
 
         <pagination-component
           .currentPage=${this.currentPage}
