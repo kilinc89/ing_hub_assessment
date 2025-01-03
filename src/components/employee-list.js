@@ -6,7 +6,7 @@ import './pagination.js';
 
 export class EmployeeList extends LitElement {
   static properties = {
-    viewMode: { type: String }, // 'table' or 'list'
+    viewMode: { type: String },
     employees: { type: Array },
     currentPage: { type: Number },
     pageSize: { type: Number },
@@ -21,7 +21,6 @@ export class EmployeeList extends LitElement {
     this.pageSize = 5;
     this.searchTerm = '';
 
-    // Listen to store changes
     store.subscribe(() => {
       this.employees = store.getState().employees;
     });
@@ -31,28 +30,6 @@ export class EmployeeList extends LitElement {
     body {
       font-family: Arial, sans-serif;
       color: #333;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 12px;
-      text-align: left;
-    }
-
-    th {
-      background-color: #f9f9f9;
-      font-weight: bold;
-      color: #f60;
-    }
-
-    tr:nth-child(even) {
-      background-color: #f2f2f2;
     }
 
     .top-container {
@@ -84,7 +61,68 @@ export class EmployeeList extends LitElement {
       background-color: #e55;
     }
 
- 
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f9f9f9;
+      font-weight: bold;
+      color: #f60;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-actions {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .card-actions a, .card-actions button {
+      background-color: #f60;
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .card-actions button:hover, .card-actions a:hover {
+      background-color: #e55;
+    }
   `;
 
   get filteredEmployees() {
@@ -101,7 +139,7 @@ export class EmployeeList extends LitElement {
 
   handleSearch(e) {
     this.searchTerm = e.target.value;
-    this.currentPage = 1; // reset to first page
+    this.currentPage = 1;
   }
 
   changeViewMode(mode) {
@@ -126,8 +164,6 @@ export class EmployeeList extends LitElement {
       this.requestUpdate();
     });
   }
-
-
 
   renderTable() {
     return html`
@@ -172,18 +208,20 @@ export class EmployeeList extends LitElement {
 
   renderList() {
     return html`
-      <ul>
+      <div class="card-container">
         ${this.paginatedEmployees.map(emp => html`
-          <li>
-            <div>${emp.firstName} ${emp.lastName}</div>
+          <div class="card">
+            <div class="card-header">${emp.firstName} ${emp.lastName}</div>
             <div>${emp.department} - ${emp.position}</div>
-            <div>
+            <div>${emp.email}</div>
+            <div>${emp.phone}</div>
+            <div class="card-actions">
               <a href="/edit/${emp.id}">${t('actions.edit')}</a>
               <button @click=${() => this.deleteEmployee(emp)}>${t('actions.delete')}</button>
             </div>
-          </li>
+          </div>
         `)}
-      </ul>
+      </div>
     `;
   }
 
@@ -198,7 +236,6 @@ export class EmployeeList extends LitElement {
           </div>
         </div>
 
-        <!-- The actual employee data display -->
         ${this.viewMode === 'table' ? this.renderTable() : this.renderList()}
 
         <pagination-component
@@ -210,4 +247,5 @@ export class EmployeeList extends LitElement {
     `;
   }
 }
+
 customElements.define('employee-list', EmployeeList);
