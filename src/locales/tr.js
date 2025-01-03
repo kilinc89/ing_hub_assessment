@@ -23,6 +23,7 @@ export const tr = {
         "edit": "Düzenle",
         "delete": "Sil",
         "search": "Ara",
+        "employees": "Çalışanlar",
         "confirm": "Emin misiniz?",
         "proceed": "Devam Et",
         "cancel": "İptal"

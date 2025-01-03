@@ -59,6 +59,36 @@ export class EmployeeList extends LitElement {
       background-color: #f2f2f2;
       font-weight: bold;
     }
+
+    .top-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+      padding: 0.5rem;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+
+    }
+
+    button {
+      background-color: #f60;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      margin-left: 0.5rem;
+    }
+
+    button:hover {
+      background-color: #e55;
+    }
   `;
 
   get filteredEmployees() {
@@ -172,12 +202,13 @@ export class EmployeeList extends LitElement {
   render() {
     return html`
       <div>
-        <!-- Search Box -->
-        <input type="text" .value=${this.searchTerm} @input=${this.handleSearch} placeholder="${t('actions.search')}..."/>
-
-        <!-- Toggle View Mode -->
-        <button @click=${() => this.changeViewMode('table')}>Table</button>
-        <button @click=${() => this.changeViewMode('list')}>List</button>
+        <div class="top-container">
+          <input type="text" .value=${this.searchTerm} @input=${this.handleSearch} placeholder="${t('actions.search')}..."/>
+          <div class="button-container">
+            <button @click=${() => this.changeViewMode('table')}>Table</button>
+            <button @click=${() => this.changeViewMode('list')}>List</button>
+          </div>
+        </div>
 
         <!-- The actual employee data display -->
         ${this.viewMode === 'table' ? this.renderTable() : this.renderList()}

@@ -23,6 +23,7 @@ export const en = {
         "edit": "Edit",
         "delete": "Delete",
         "search": "Search",
+        "employees": "Employees",
         "confirm": "Are you sure?",
         "proceed": "Proceed",
         "cancel": "Cancel"

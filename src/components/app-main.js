@@ -12,11 +12,16 @@ export class AppMain extends LitElement {
 
     static styles = css`
     /* Basic styling */
+    :host {
+      display: block;
+      min-height: 100vh;
+      background-color: #f9f9f9; /* Set your desired background color */
+    }
   `;
 
     render() {
         return html`
-      <language-switcher @language-changed=${() => this.requestUpdate()}></language-switcher>
+     
       <nav-menu></nav-menu>
       <div id="outlet"></div>
     `;
