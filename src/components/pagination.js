@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import { t } from '../utils/i18n.js';
 
 export class Pagination extends LitElement {
     static properties = {
@@ -39,14 +40,14 @@ export class Pagination extends LitElement {
         this.totalPages = 1;
     }
 
-    render() {
-        return html`
-      <div class="pagination">
-        <button @click=${this._prevPage} ?disabled=${this.currentPage === 1}>Previous</button>
-        <span>Page ${this.currentPage} of ${this.totalPages}</span>
-        <button @click=${this._nextPage} ?disabled=${this.currentPage >= this.totalPages}>Next</button>
-      </div>
-    `;
+
+
+    connectedCallback() {
+        super.connectedCallback();
+        window.addEventListener('language-changed', () => {
+            console.log('language-changed');
+            this.requestUpdate();
+        });
     }
 
     _prevPage() {
@@ -62,6 +63,18 @@ export class Pagination extends LitElement {
             this.dispatchEvent(new CustomEvent('page-changed', { detail: this.currentPage }));
         }
     }
+
+    render() {
+        return html`
+      <div class="pagination">
+        <button @click=${this._prevPage} ?disabled=${this.currentPage === 1}>${t('views.previous')}</button>
+        <span>Page ${this.currentPage} of ${this.totalPages}</span>
+        <button @click=${this._nextPage} ?disabled=${this.currentPage >= this.totalPages}>${t('views.next')}</button>
+      </div>
+    `;
+    }
+
+
 }
 
 customElements.define('pagination-component', Pagination); 

@@ -59,6 +59,14 @@ export class EmployeeCard extends LitElement {
     }
   `;
 
+    connectedCallback() {
+        super.connectedCallback();
+        window.addEventListener('language-changed', () => {
+            console.log('language-changed');
+            this.requestUpdate();
+        });
+    }
+
     render() {
         const { employee } = this;
         return html`
