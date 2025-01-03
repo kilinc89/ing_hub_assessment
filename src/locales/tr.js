@@ -27,6 +27,13 @@ export const tr = {
         "confirm": "Emin misiniz?",
         "proceed": "Devam Et",
         "cancel": "İptal"
+    },
+    "views": {
+        "table": "Tablo",
+        "list": "Liste",
+        "pagination": "Sayfalama",
+        "previous": "Önceki",
+        "next": "Sonraki"
     }
     // Diğer çevirileri buraya ekleyin
 }; 

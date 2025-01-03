@@ -27,6 +27,13 @@ export const en = {
         "confirm": "Are you sure?",
         "proceed": "Proceed",
         "cancel": "Cancel"
+    },
+    "views": {
+        "table": "Table",
+        "list": "List",
+        "pagination": "Pagination",
+        "previous": "Previous",
+        "next": "Next"
     }
     // Add other translations here
 }; 

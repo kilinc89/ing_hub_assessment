@@ -32,32 +32,26 @@ export class EmployeeList extends LitElement {
       color: #333;
     }
 
-    button {
-      background-color: #f60;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #e55;
-    }
-
     table {
       width: 100%;
       border-collapse: collapse;
+      margin-top: 1rem;
     }
 
     th, td {
       border: 1px solid #ddd;
-      padding: 8px;
+      padding: 12px;
       text-align: left;
     }
 
     th {
-      background-color: #f2f2f2;
+      background-color: #f9f9f9;
       font-weight: bold;
+      color: #f60;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
     }
 
     .top-container {
@@ -74,7 +68,6 @@ export class EmployeeList extends LitElement {
       justify-content: center;
       align-items: center;
       gap: 10px;
-
     }
 
     button {
@@ -87,6 +80,26 @@ export class EmployeeList extends LitElement {
     }
 
     button:hover {
+      background-color: #e55;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .pagination button {
+      background-color: #f60;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      margin: 0 1rem;
+    }
+
+    .pagination button:hover {
       background-color: #e55;
     }
   `;
@@ -205,23 +218,23 @@ export class EmployeeList extends LitElement {
         <div class="top-container">
           <input type="text" .value=${this.searchTerm} @input=${this.handleSearch} placeholder="${t('actions.search')}..."/>
           <div class="button-container">
-            <button @click=${() => this.changeViewMode('table')}>Table</button>
-            <button @click=${() => this.changeViewMode('list')}>List</button>
+            <button @click=${() => this.changeViewMode('table')}>${t('views.table')}</button>
+            <button @click=${() => this.changeViewMode('list')}>${t('views.list')}</button>
           </div>
         </div>
 
         <!-- The actual employee data display -->
         ${this.viewMode === 'table' ? this.renderTable() : this.renderList()}
 
-        <!-- Pagination -->
+        <!-- Centered Pagination -->
         <div class="pagination">
-          <button @click=${this.prevPage} ?disabled=${this.currentPage === 1}>Previous</button>
-          <span>Page ${this.currentPage}</span>
+          <button @click=${this.prevPage} ?disabled=${this.currentPage === 1}>${t('views.previous')}</button>
+          <span> ${this.currentPage}</span>
           <button 
             @click=${this.nextPage} 
             ?disabled=${this.currentPage * this.pageSize >= this.filteredEmployees.length}
           >
-            Next
+            ${t('views.next')}
           </button>
         </div>
       </div>
