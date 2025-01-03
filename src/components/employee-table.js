@@ -43,6 +43,12 @@ export class EmployeeTable extends LitElement {
     button:hover, a:hover {
       background-color: #e55;
     }
+
+    @media (max-width: 768px) {
+      .collapse {
+        display: none;
+      }
+    }
   `;
 
     render() {
@@ -52,12 +58,12 @@ export class EmployeeTable extends LitElement {
           <tr>
             <th>${t('labels.firstName')}</th>
             <th>${t('labels.lastName')}</th>
-            <th>${t('labels.dateOfEmployment')}</th>
-            <th>${t('labels.dateOfBirth')}</th>
-            <th>${t('labels.phone')}</th>
-            <th>${t('labels.email')}</th>
-            <th>${t('labels.department')}</th>
-            <th>${t('labels.position')}</th>
+            <th class="collapse">${t('labels.dateOfEmployment')}</th>
+            <th class="collapse">${t('labels.dateOfBirth')}</th>
+            <th class="collapse">${t('labels.phone')}</th>
+            <th class="collapse">${t('labels.email')}</th>
+            <th class="collapse">${t('labels.department')}</th>
+            <th class="collapse">${t('labels.position')}</th>
             <th>${t('actions.edit')}</th>
             <th>${t('actions.delete')}</th>
           </tr>
@@ -67,12 +73,12 @@ export class EmployeeTable extends LitElement {
             <tr>
               <td>${emp.firstName}</td>
               <td>${emp.lastName}</td>
-              <td>${emp.dateOfEmployment}</td>
-              <td>${emp.dateOfBirth}</td>
-              <td>${emp.phone}</td>
-              <td>${emp.email}</td>
-              <td>${emp.department}</td>
-              <td>${emp.position}</td>
+              <td class="collapse">${emp.dateOfEmployment}</td>
+              <td class="collapse">${emp.dateOfBirth}</td>
+              <td class="collapse">${emp.phone}</td>
+              <td class="collapse">${emp.email}</td>
+              <td class="collapse">${emp.department}</td>
+              <td class="collapse">${emp.position}</td>
               <td>
                 <a href="/edit/${emp.id}">${t('actions.edit')}</a>
               </td>
