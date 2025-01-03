@@ -24,7 +24,9 @@ export const en = {
         "delete": "Delete",
         "search": "Search",
         "employees": "Employees",
-        "confirm": "Are you sure?",
+        "confirm": "Are you sure to add this employee?",
+        "confirmEdit": "Are you sure to edit this employee?",
+        "confirmDelete": "Are you sure you want to delete this employee?",
         "proceed": "Proceed",
         "cancel": "Cancel"
     },

@@ -89,8 +89,13 @@ export class EmployeeForm extends LitElement {
       return;
     }
 
-    const confirmed = window.confirm(`${t('actions.confirm')}`);
-    if (!confirmed) return;
+    if (this.employeeId) {
+      const confirmed = window.confirm(`${t('actions.confirmEdit')} \n${this.employee.firstName} ${this.employee.lastName}`);
+      if (!confirmed) return;
+    } else {
+      const confirmed = window.confirm(`${t('actions.confirm')} \n${this.employee.firstName} ${this.employee.lastName}`);
+      if (!confirmed) return;
+    }
 
     if (this.employeeId) {
       store.dispatch(updateEmployee({ ...this.employee }));

@@ -24,7 +24,9 @@ export const tr = {
         "delete": "Sil",
         "search": "Ara",
         "employees": "Çalışanlar",
-        "confirm": "Emin misiniz?",
+        "confirm": "Çalışanı eklemek istediğinizden emin misiniz?",
+        "confirmEdit": "Çalışanı düzenlemek istediğinizden emin misiniz?",
+        "confirmDelete": "Çalışanı silmek istediğinizden emin misiniz?",
         "proceed": "Devam Et",
         "cancel": "İptal"
     },

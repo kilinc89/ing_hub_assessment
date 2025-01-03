@@ -103,7 +103,7 @@ export class EmployeeList extends LitElement {
   }
 
   deleteEmployee(emp) {
-    const confirmed = window.confirm(`${t('actions.confirm')} \n${emp.firstName} ${emp.lastName}`);
+    const confirmed = window.confirm(`${t('actions.confirmDelete')} \n${emp.firstName} ${emp.lastName}`);
     if (confirmed) {
       store.dispatch({ type: 'DELETE_EMPLOYEE', payload: { id: emp.id } });
     }
