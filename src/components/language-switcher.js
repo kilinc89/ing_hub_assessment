@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { setLanguage } from '../utils/i18n.js';
 
-class LanguageSwitcher extends LitElement {
+export class LanguageSwitcher extends LitElement {
     static styles = css`
         select {
             margin: 0.5rem;

@@ -49,7 +49,12 @@ export class EmployeeList extends LitElement {
       align-items: center;
       background-color: #fff;
       border-bottom: 1px solid #ddd;
-      padding: 0.5rem;
+      padding: 0.5rem 1rem;;
+
+    }
+
+    .content-container {
+      padding: 1rem;
     }
 
     .button-container {
@@ -135,7 +140,7 @@ export class EmployeeList extends LitElement {
 
   render() {
     return html`
-      <div>
+      <div >
         <div class="top-container">
           <input type="text" .value=${this.searchTerm} @input=${this.handleSearch} placeholder="${t('actions.search')}..."/>
           <div class="button-container">
@@ -144,13 +149,18 @@ export class EmployeeList extends LitElement {
           </div>
         </div>
 
-        ${this.viewMode === 'table'
+        <div class="content-container">
+
+          ${this.viewMode === 'table'
         ? html`<employee-table .employees=${this.paginatedEmployees} @delete-employee=${(e) => this.deleteEmployee(e.detail)}></employee-table>`
         : html`<div class="card-container">
-                  ${this.paginatedEmployees.map(emp => html`
-                    <employee-card .employee=${emp} @delete-employee=${(e) => this.deleteEmployee(e.detail)}></employee-card>
-                  `)}
-                </div>`}
+                    ${this.paginatedEmployees.map(emp => html`
+                      <employee-card .employee=${emp} @delete-employee=${(e) => this.deleteEmployee(e.detail)}></employee-card>
+                    `)}
+                  </div>`}
+        </div>
+
+      
 
         <pagination-component
           .currentPage=${this.currentPage}
