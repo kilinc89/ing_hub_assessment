@@ -89,19 +89,20 @@ export class EmployeeForm extends LitElement {
       return;
     }
 
-    if (this.employeeId) {
-      const confirmed = window.confirm(`${t('actions.confirmEdit')} \n${this.employee.firstName} ${this.employee.lastName}`);
-      if (!confirmed) return;
-    } else {
-      const confirmed = window.confirm(`${t('actions.confirm')} \n${this.employee.firstName} ${this.employee.lastName}`);
-      if (!confirmed) return;
-    }
+
+    const fullName = `${this.employee.firstName} ${this.employee.lastName}`;
 
     if (this.employeeId) {
-      store.dispatch(updateEmployee({ ...this.employee }));
+      const confirmed = window.confirm(`${t('actions.confirmEdit')} \n${fullName}`);
+      if (confirmed) {
+        store.dispatch(updateEmployee({ ...this.employee }));
+      }
     } else {
-      const newEmployee = { ...this.employee, id: Date.now().toString() };
-      store.dispatch(addEmployee(newEmployee));
+      const confirmed = window.confirm(`${t('actions.confirm')} \n${fullName}`);
+      if (confirmed) {
+        const newEmployee = { ...this.employee, id: Date.now().toString() };
+        store.dispatch(addEmployee(newEmployee));
+      }
     }
 
     Router.go('/list');
