@@ -14,6 +14,7 @@ export class EmployeeForm extends LitElement {
     employee: { type: Object },
     showModal: { type: Boolean },
     modalMessage: { type: String },
+    modalTitle: { type: String },
     errorMessage: { type: String },
     showError: { type: Boolean }
   };
@@ -98,16 +99,16 @@ export class EmployeeForm extends LitElement {
     this.showError = true;
   }
 
-  async handleSubmit(e) {
-    e.preventDefault();
-
-    // Check if all fields are filled
-    if (!this.employee.firstName || !this.employee.lastName || !this.employee.dateOfEmployment || !this.employee.dateOfBirth || !this.employee.phone || !this.employee.email || !this.employee.department || !this.employee.position) {
+  validateForm() {
+    // Check required fields
+    if (!this.employee.firstName || !this.employee.lastName || !this.employee.dateOfEmployment ||
+      !this.employee.dateOfBirth || !this.employee.phone || !this.employee.email ||
+      !this.employee.department || !this.employee.position) {
       this.showErrorMessage(t('validation.fillAllFields'));
-      return;
+      return false;
     }
 
-    // Check if employee is older than 18
+    // Check age
     const birthDate = new Date(this.employee.dateOfBirth);
     const ageDiff = Date.now() - birthDate.getTime();
     const ageDate = new Date(ageDiff);
@@ -115,10 +116,10 @@ export class EmployeeForm extends LitElement {
 
     if (age < 18) {
       this.showErrorMessage(t('validation.ageRestriction'));
-      return;
+      return false;
     }
 
-    // Check for unique email and phone
+    // Check unique email and phone
     const state = store.getState();
     const existingEmployees = state.employees;
 
@@ -126,23 +127,33 @@ export class EmployeeForm extends LitElement {
       emp.email === this.employee.email && emp.id !== this.employeeId
     );
 
+    if (emailExists) {
+      this.showErrorMessage(t('validation.emailExists'));
+      return false;
+    }
+
     const phoneExists = existingEmployees.some(emp =>
       emp.phone === this.employee.phone && emp.id !== this.employeeId
     );
 
-    if (emailExists) {
-      this.showErrorMessage(t('validation.emailExists'));
-      return;
-    }
-
     if (phoneExists) {
       this.showErrorMessage(t('validation.phoneExists'));
+      return false;
+    }
+
+    return true;
+  }
+
+  async handleSubmit(e) {
+    e.preventDefault();
+
+    if (!this.validateForm()) {
       return;
     }
 
     const fullName = `${this.employee.firstName} ${this.employee.lastName}`;
-    this.modalTitle = this.employeeId ? `${t('actions.confirmEdit')}` : `${t('actions.confirm')}`;
-    this.modalMessage = `${fullName}`;
+    this.modalTitle = this.employeeId ? t('actions.confirmEdit') : t('actions.confirm');
+    this.modalMessage = fullName;
     this.showModal = true;
   }
 
