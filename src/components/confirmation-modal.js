@@ -1,9 +1,11 @@
 import { LitElement, html, css } from 'lit';
+import { t } from '../utils/i18n.js';
 
 export class ConfirmationModal extends LitElement {
     static properties = {
         open: { type: Boolean },
-        message: { type: String }
+        message: { type: String },
+        title: { type: String }
     };
 
     static styles = css`
@@ -20,6 +22,7 @@ export class ConfirmationModal extends LitElement {
       visibility: hidden;
       opacity: 0;
       transition: visibility 0s, opacity 0.3s;
+      z-index: 1000;
     }
 
     .modal.open {
@@ -29,19 +32,35 @@ export class ConfirmationModal extends LitElement {
 
     .modal-content {
       background-color: #fff;
-      padding: 1rem;
+      padding: 2rem;
       border-radius: 8px;
       text-align: center;
       max-width: 400px;
-      width: 100%;
+      width: 90%;
+    }
+
+    .modal-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .modal-message {
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
     }
 
     button {
-      margin: 0.5rem;
       padding: 0.5rem 1rem;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      font-weight: bold;
     }
 
     .confirm {
@@ -51,6 +70,11 @@ export class ConfirmationModal extends LitElement {
 
     .cancel {
       background-color: #ccc;
+      color: #333;
+    }
+
+    button:hover {
+      opacity: 0.9;
     }
   `;
 
@@ -65,10 +89,12 @@ export class ConfirmationModal extends LitElement {
         return html`
       <div class="modal ${this.open ? 'open' : ''}">
         <div class="modal-content">
-          <p>${this.title}</p>
-          <p>${this.message}</p>
-          <button class="confirm" @click=${this._confirm}>Proceed</button>
-          <button class="cancel" @click=${this._cancel}>Cancel</button>
+          <div class="modal-title">${this.title}</div>
+          <div class="modal-message">${this.message}</div>
+          <div class="modal-actions">
+            <button class="confirm" @click=${this._confirm}>${t('actions.proceed')}</button>
+            <button class="cancel" @click=${this._cancel}>${t('actions.cancel')}</button>
+          </div>
         </div>
       </div>
     `;
@@ -76,12 +102,10 @@ export class ConfirmationModal extends LitElement {
 
     _confirm() {
         this.dispatchEvent(new CustomEvent('confirm'));
-        this.open = false;
     }
 
     _cancel() {
         this.dispatchEvent(new CustomEvent('cancel'));
-        this.open = false;
     }
 }
 

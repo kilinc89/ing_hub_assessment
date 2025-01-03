@@ -5,6 +5,7 @@ import { t } from '../utils/i18n.js';
 import './pagination.js';
 import './employee-card.js';
 import './employee-table.js';
+import './confirmation-modal.js';
 
 export class EmployeeList extends LitElement {
   static properties = {
@@ -12,7 +13,11 @@ export class EmployeeList extends LitElement {
     employees: { type: Array },
     currentPage: { type: Number },
     pageSize: { type: Number },
-    searchTerm: { type: String }
+    searchTerm: { type: String },
+    showModal: { type: Boolean },
+    modalMessage: { type: String },
+    modalTitle: { type: String },
+    employeeToDelete: { type: Object }
   };
 
   constructor() {
@@ -22,6 +27,10 @@ export class EmployeeList extends LitElement {
     this.currentPage = 1;
     this.pageSize = 5;
     this.searchTerm = '';
+    this.showModal = false;
+    this.modalMessage = '';
+    this.modalTitle = '';
+    this.employeeToDelete = null;
 
     store.subscribe(() => {
       this.employees = store.getState().employees;
@@ -103,10 +112,18 @@ export class EmployeeList extends LitElement {
   }
 
   deleteEmployee(emp) {
-    const confirmed = window.confirm(`${t('actions.confirmDelete')} \n${emp.firstName} ${emp.lastName}`);
-    if (confirmed) {
-      store.dispatch({ type: 'DELETE_EMPLOYEE', payload: { id: emp.id } });
+    this.employeeToDelete = emp;
+    this.modalTitle = t('actions.confirmDelete');
+    this.modalMessage = `${emp.firstName} ${emp.lastName}`;
+    this.showModal = true;
+  }
+
+  _handleConfirmDelete() {
+    if (this.employeeToDelete) {
+      store.dispatch({ type: 'DELETE_EMPLOYEE', payload: { id: this.employeeToDelete.id } });
+      this.employeeToDelete = null;
     }
+    this.showModal = false;
   }
 
   render() {
@@ -133,6 +150,14 @@ export class EmployeeList extends LitElement {
           .totalPages=${Math.ceil(this.filteredEmployees.length / this.pageSize)}
           @page-changed=${this.handlePageChange}
         ></pagination-component>
+
+        <confirmation-modal
+          .open=${this.showModal}
+          .message=${this.modalMessage}
+          .title=${this.modalTitle}
+          @confirm=${this._handleConfirmDelete}
+          @cancel=${() => (this.showModal = false)}
+        ></confirmation-modal>
       </div>
     `;
   }
