@@ -11,12 +11,14 @@ export const tr = {
     },
     "departments": {
         "analytics": "Analiz",
-        "tech": "Teknoloji"
+        "tech": "Teknoloji",
+        "choose": "Seçiniz"
     },
     "positions": {
         "junior": "Yeni Başlayan",
         "medior": "Orta Düzey",
-        "senior": "Kıdemli"
+        "senior": "Kıdemli",
+        "choose": "Seçiniz"
     },
     "actions": {
         "addNew": "Yeni Ekle",

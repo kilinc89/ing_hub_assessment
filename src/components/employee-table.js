@@ -71,6 +71,14 @@ export class EmployeeTable extends LitElement {
         this.dispatchEvent(new CustomEvent('delete-employee', { detail: emp }));
     }
 
+    chooseDepartment(department) {
+        return department === "Analytics" ? t('departments.analytics') : t('departments.tech');
+    }
+
+    choosePosition(position) {
+        return position === "Junior" ? t('positions.junior') : position === "Medior" ? t('positions.medior') : t('positions.senior');
+    }
+
     render() {
         return html`
       <table>
@@ -97,8 +105,8 @@ export class EmployeeTable extends LitElement {
               <td class="collapse">${emp.dateOfBirth}</td>
               <td class="collapse">${emp.phone}</td>
               <td class="collapse">${emp.email}</td>
-              <td class="collapse">${emp.department}</td>
-              <td class="collapse">${emp.position}</td>
+              <td class="collapse">${this.chooseDepartment(emp.department)}</td>
+              <td class="collapse">${this.choosePosition(emp.position)}</td>
               <td>
       
                  <button @click=${() => Router.go('/edit/' + emp.id)}>${t('actions.edit')}</button>

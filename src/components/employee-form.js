@@ -62,8 +62,8 @@ export class EmployeeForm extends LitElement {
       dateOfBirth: '',
       phone: '',
       email: '',
-      department: 'Analytics',
-      position: 'Junior'
+      department: '',
+      position: ''
     };
   }
 

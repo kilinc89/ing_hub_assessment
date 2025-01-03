@@ -11,12 +11,14 @@ export const en = {
     },
     "departments": {
         "analytics": "Analytics",
-        "tech": "Tech"
+        "tech": "Tech",
+        "choose": "Choose"
     },
     "positions": {
         "junior": "Junior",
         "medior": "Medior",
-        "senior": "Senior"
+        "senior": "Senior",
+        "choose": "Choose"
     },
     "actions": {
         "addNew": "Add New",
