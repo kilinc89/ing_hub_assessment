@@ -4,6 +4,7 @@ import { store, addEmployee, updateEmployee } from '../store/store.js';
 import { t } from '../utils/i18n.js';
 import { Router } from '@vaadin/router';
 import './confirmation-modal.js';
+import './error-modal.js';
 
 export class EmployeeForm extends LitElement {
 
@@ -12,7 +13,9 @@ export class EmployeeForm extends LitElement {
     employeeId: { type: String },
     employee: { type: Object },
     showModal: { type: Boolean },
-    modalMessage: { type: String }
+    modalMessage: { type: String },
+    errorMessage: { type: String },
+    showError: { type: Boolean }
   };
 
   static styles = css`
@@ -71,6 +74,8 @@ export class EmployeeForm extends LitElement {
     this.showModal = false;
     this.modalMessage = '';
     this.modalTitle = '';
+    this.errorMessage = '';
+    this.showError = false;
   }
 
   onBeforeEnter(location) {
@@ -88,12 +93,17 @@ export class EmployeeForm extends LitElement {
     this.employee = { ...this.employee, [field]: e.target.value };
   }
 
+  showErrorMessage(message) {
+    this.errorMessage = message;
+    this.showError = true;
+  }
+
   async handleSubmit(e) {
     e.preventDefault();
 
     // Check if all fields are filled
     if (!this.employee.firstName || !this.employee.lastName || !this.employee.dateOfEmployment || !this.employee.dateOfBirth || !this.employee.phone || !this.employee.email || !this.employee.department || !this.employee.position) {
-      alert('Please fill all fields.');
+      this.showErrorMessage(t('validation.fillAllFields'));
       return;
     }
 
@@ -104,7 +114,29 @@ export class EmployeeForm extends LitElement {
     const age = Math.abs(ageDate.getUTCFullYear() - 1970);
 
     if (age < 18) {
-      alert('Employee must be older than 18 years.');
+      this.showErrorMessage(t('validation.ageRestriction'));
+      return;
+    }
+
+    // Check for unique email and phone
+    const state = store.getState();
+    const existingEmployees = state.employees;
+
+    const emailExists = existingEmployees.some(emp =>
+      emp.email === this.employee.email && emp.id !== this.employeeId
+    );
+
+    const phoneExists = existingEmployees.some(emp =>
+      emp.phone === this.employee.phone && emp.id !== this.employeeId
+    );
+
+    if (emailExists) {
+      this.showErrorMessage(t('validation.emailExists'));
+      return;
+    }
+
+    if (phoneExists) {
+      this.showErrorMessage(t('validation.phoneExists'));
       return;
     }
 
@@ -122,6 +154,13 @@ export class EmployeeForm extends LitElement {
       store.dispatch(addEmployee(newEmployee));
     }
     Router.go('/list');
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener('language-changed', () => {
+      this.requestUpdate();
+    });
   }
 
   render() {
@@ -209,6 +248,12 @@ export class EmployeeForm extends LitElement {
         @confirm=${this._handleConfirm}
         @cancel=${() => (this.showModal = false)}
       ></confirmation-modal>
+
+      <error-modal
+        .open=${this.showError}
+        .message=${this.errorMessage}
+        @close-error-modal=${() => (this.showError = false)}
+      ></error-modal>
     `;
   }
 }

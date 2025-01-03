@@ -45,7 +45,6 @@ export class Pagination extends LitElement {
     connectedCallback() {
         super.connectedCallback();
         window.addEventListener('language-changed', () => {
-            console.log('language-changed');
             this.requestUpdate();
         });
     }

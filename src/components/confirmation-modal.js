@@ -2,13 +2,13 @@ import { LitElement, html, css } from 'lit';
 import { t } from '../utils/i18n.js';
 
 export class ConfirmationModal extends LitElement {
-    static properties = {
-        open: { type: Boolean },
-        message: { type: String },
-        title: { type: String }
-    };
+  static properties = {
+    open: { type: Boolean },
+    message: { type: String },
+    title: { type: String }
+  };
 
-    static styles = css`
+  static styles = css`
     .modal {
       display: flex;
       justify-content: center;
@@ -78,15 +78,15 @@ export class ConfirmationModal extends LitElement {
     }
   `;
 
-    constructor() {
-        super();
-        this.open = false;
-        this.message = '';
-        this.title = '';
-    }
+  constructor() {
+    super();
+    this.open = false;
+    this.message = '';
+    this.title = '';
+  }
 
-    render() {
-        return html`
+  render() {
+    return html`
       <div class="modal ${this.open ? 'open' : ''}">
         <div class="modal-content">
           <div class="modal-title">${this.title}</div>
@@ -98,15 +98,15 @@ export class ConfirmationModal extends LitElement {
         </div>
       </div>
     `;
-    }
+  }
 
-    _confirm() {
-        this.dispatchEvent(new CustomEvent('confirm'));
-    }
+  _confirm() {
+    this.dispatchEvent(new CustomEvent('confirm'));
+  }
 
-    _cancel() {
-        this.dispatchEvent(new CustomEvent('cancel'));
-    }
+  _cancel() {
+    this.dispatchEvent(new CustomEvent('cancel'));
+  }
 }
 
 customElements.define('confirmation-modal', ConfirmationModal);

@@ -11,7 +11,6 @@ class LanguageSwitcher extends LitElement {
 
     handleLanguageChange(event) {
         setLanguage(event.target.value);
-        console.log('Dispatching language-changed event');
         this.dispatchEvent(new CustomEvent('language-changed', { bubbles: true, composed: true }));
     }
 

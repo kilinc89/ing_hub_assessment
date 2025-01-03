@@ -38,6 +38,12 @@ export const tr = {
         "pagination": "Sayfalama",
         "previous": "Önceki",
         "next": "Sonraki"
+    },
+    "validation": {
+        "emailExists": "Bu e-posta adresi zaten kullanımda.",
+        "phoneExists": "Bu telefon numarası zaten kullanımda.",
+        "fillAllFields": "Lütfen tüm alanları doldurun.",
+        "ageRestriction": "Çalışan 18 yaşından büyük olmalıdır."
     }
     // Diğer çevirileri buraya ekleyin
 }; 

@@ -38,6 +38,12 @@ export const en = {
         "pagination": "Pagination",
         "previous": "Previous",
         "next": "Next"
+    },
+    "validation": {
+        "emailExists": "This email address is already in use.",
+        "phoneExists": "This phone number is already in use.",
+        "fillAllFields": "Please fill all fields.",
+        "ageRestriction": "Employee must be older than 18 years."
     }
     // Add other translations here
 }; 
