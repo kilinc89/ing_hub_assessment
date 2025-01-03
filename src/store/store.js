@@ -1,40 +1,62 @@
 // src/store/store.js
 import { createStore } from 'redux';
 
-const initialState = {
-    employees: Array.from({ length: 15 }, (_, i) => ({
-        id: i.toString(),
-        firstName: `Employee${i + 1}`,
-        lastName: `LastName${i + 1}`,
-        dateOfEmployment: '2023-01-01',
-        dateOfBirth: '1990-01-01',
-        phone: '123-456-7890',
-        email: `employee${i + 1}@example.com`,
-        department: 'Analytics',
-        position: 'Junior'
-    }))
+// Load initial state from localStorage
+const loadState = () => {
+    try {
+        const serializedState = localStorage.getItem('employeeState');
+        if (serializedState === null) {
+            return {
+                employees: []
+            };
+        }
+        return JSON.parse(serializedState);
+    } catch (err) {
+        console.error('Error loading state:', err);
+        return undefined;
+    }
 };
 
+// Save state to localStorage
+const saveState = (state) => {
+    try {
+        const serializedState = JSON.stringify(state);
+        localStorage.setItem('employeeState', serializedState);
+    } catch (err) {
+        console.error('Error saving state:', err);
+    }
+};
+
+const initialState = loadState();
+
 function employeeReducer(state = initialState, action) {
+    let newState;
     switch (action.type) {
         case 'ADD_EMPLOYEE':
-            return {
+            newState = {
                 ...state,
                 employees: [...state.employees, action.payload]
             };
+            break;
         case 'UPDATE_EMPLOYEE': {
             const updated = state.employees.map(e =>
                 e.id === action.payload.id ? { ...action.payload } : e
             );
-            return { ...state, employees: updated };
+            newState = { ...state, employees: updated };
+            break;
         }
         case 'DELETE_EMPLOYEE': {
             const filtered = state.employees.filter(e => e.id !== action.payload.id);
-            return { ...state, employees: filtered };
+            newState = { ...state, employees: filtered };
+            break;
         }
         default:
             return state;
     }
+
+    // Save to localStorage after each state change
+    saveState(newState);
+    return newState;
 }
 
 export const store = createStore(employeeReducer);

@@ -126,6 +126,13 @@ export class EmployeeList extends LitElement {
     this.showModal = false;
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener('language-changed', () => {
+      this.requestUpdate();
+    });
+  }
+
   render() {
     return html`
       <div>
