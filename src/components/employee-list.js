@@ -2,6 +2,7 @@
 import { LitElement, html, css } from 'lit';
 import { store } from '../store/store.js';
 import { t } from '../utils/i18n.js';
+import './pagination.js';
 
 export class EmployeeList extends LitElement {
   static properties = {
@@ -83,25 +84,7 @@ export class EmployeeList extends LitElement {
       background-color: #e55;
     }
 
-    .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 1rem;
-    }
-
-    .pagination button {
-      background-color: #f60;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      margin: 0 1rem;
-    }
-
-    .pagination button:hover {
-      background-color: #e55;
-    }
+ 
   `;
 
   get filteredEmployees() {
@@ -125,16 +108,8 @@ export class EmployeeList extends LitElement {
     this.viewMode = mode;
   }
 
-  nextPage() {
-    if (this.currentPage * this.pageSize < this.filteredEmployees.length) {
-      this.currentPage++;
-    }
-  }
-
-  prevPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-    }
+  handlePageChange(e) {
+    this.currentPage = e.detail;
   }
 
   deleteEmployee(emp) {
@@ -226,17 +201,11 @@ export class EmployeeList extends LitElement {
         <!-- The actual employee data display -->
         ${this.viewMode === 'table' ? this.renderTable() : this.renderList()}
 
-        <!-- Centered Pagination -->
-        <div class="pagination">
-          <button @click=${this.prevPage} ?disabled=${this.currentPage === 1}>${t('views.previous')}</button>
-          <span> ${this.currentPage}</span>
-          <button 
-            @click=${this.nextPage} 
-            ?disabled=${this.currentPage * this.pageSize >= this.filteredEmployees.length}
-          >
-            ${t('views.next')}
-          </button>
-        </div>
+        <pagination-component
+          .currentPage=${this.currentPage}
+          .totalPages=${Math.ceil(this.filteredEmployees.length / this.pageSize)}
+          @page-changed=${this.handlePageChange}
+        ></pagination-component>
       </div>
     `;
   }
