@@ -65,7 +65,8 @@
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "rollup": "^4.18.0",
-    "rollup-plugin-summary": "^2.0.1"
+    "rollup-plugin-summary": "^2.0.1",
+    "sinon": "^19.0.2"
   },
   "customElements": "custom-elements.json"
 }
