@@ -3,13 +3,16 @@ import { LitElement, html, css } from 'lit';
 import { store, addEmployee, updateEmployee } from '../store/store.js';
 import { t } from '../utils/i18n.js';
 import { Router } from '@vaadin/router';
+import './confirmation-modal.js';
 
 export class EmployeeForm extends LitElement {
 
 
   static properties = {
     employeeId: { type: String },
-    employee: { type: Object }
+    employee: { type: Object },
+    showModal: { type: Boolean },
+    modalMessage: { type: String }
   };
 
   static styles = css`
@@ -65,6 +68,9 @@ export class EmployeeForm extends LitElement {
       department: '',
       position: ''
     };
+    this.showModal = false;
+    this.modalMessage = '';
+    this.modalTitle = '';
   }
 
   onBeforeEnter(location) {
@@ -84,27 +90,37 @@ export class EmployeeForm extends LitElement {
 
   async handleSubmit(e) {
     e.preventDefault();
-    if (!this.employee.firstName || !this.employee.lastName) {
-      alert('Please fill required fields.');
+
+    // Check if all fields are filled
+    if (!this.employee.firstName || !this.employee.lastName || !this.employee.dateOfEmployment || !this.employee.dateOfBirth || !this.employee.phone || !this.employee.email || !this.employee.department || !this.employee.position) {
+      alert('Please fill all fields.');
       return;
     }
 
+    // Check if employee is older than 18
+    const birthDate = new Date(this.employee.dateOfBirth);
+    const ageDiff = Date.now() - birthDate.getTime();
+    const ageDate = new Date(ageDiff);
+    const age = Math.abs(ageDate.getUTCFullYear() - 1970);
 
-    const fullName = `${this.employee.firstName} ${this.employee.lastName}`;
-
-    if (this.employeeId) {
-      const confirmed = window.confirm(`${t('actions.confirmEdit')} \n${fullName}`);
-      if (confirmed) {
-        store.dispatch(updateEmployee({ ...this.employee }));
-      }
-    } else {
-      const confirmed = window.confirm(`${t('actions.confirm')} \n${fullName}`);
-      if (confirmed) {
-        const newEmployee = { ...this.employee, id: Date.now().toString() };
-        store.dispatch(addEmployee(newEmployee));
-      }
+    if (age < 18) {
+      alert('Employee must be older than 18 years.');
+      return;
     }
 
+    const fullName = `${this.employee.firstName} ${this.employee.lastName}`;
+    this.modalTitle = this.employeeId ? `${t('actions.confirmEdit')}` : `${t('actions.confirm')}`;
+    this.modalMessage = `${fullName}`;
+    this.showModal = true;
+  }
+
+  _handleConfirm() {
+    if (this.employeeId) {
+      store.dispatch(updateEmployee({ ...this.employee }));
+    } else {
+      const newEmployee = { ...this.employee, id: Date.now().toString() };
+      store.dispatch(addEmployee(newEmployee));
+    }
     Router.go('/list');
   }
 
@@ -132,6 +148,7 @@ export class EmployeeForm extends LitElement {
           type="date" 
           .value=${this.employee.dateOfEmployment} 
           @input=${(e) => this.updateField(e, 'dateOfEmployment')} 
+          pattern="\d{4}-\d{2}-\d{2}" 
           required 
         />
 
@@ -148,7 +165,7 @@ export class EmployeeForm extends LitElement {
           type="text" 
           .value=${this.employee.phone} 
           @input=${(e) => this.updateField(e, 'phone')} 
-          pattern="^[+0-9\\s\\-()]+$"
+          required
         />
 
         <label>${t('labels.email')}</label>
@@ -163,6 +180,7 @@ export class EmployeeForm extends LitElement {
         <select 
           .value=${this.employee.department} 
           @change=${(e) => this.updateField(e, 'department')}
+          required
         >
           <option value="Analytics">${t('departments.analytics')}</option>
           <option value="Tech">${t('departments.tech')}</option>
@@ -172,6 +190,7 @@ export class EmployeeForm extends LitElement {
         <select 
           .value=${this.employee.position} 
           @change=${(e) => this.updateField(e, 'position')}
+          required
         >
           <option value="Junior">${t('positions.junior')}</option>
           <option value="Medior">${t('positions.medior')}</option>
@@ -182,6 +201,14 @@ export class EmployeeForm extends LitElement {
           ${this.employeeId ? t('actions.edit') : t('actions.addNew')}
         </button>
       </form>
+
+      <confirmation-modal
+        .open=${this.showModal}
+        .message=${this.modalMessage}
+        .title=${this.modalTitle}
+        @confirm=${this._handleConfirm}
+        @cancel=${() => (this.showModal = false)}
+      ></confirmation-modal>
     `;
   }
 }
