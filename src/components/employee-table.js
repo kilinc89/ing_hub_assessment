@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { t } from '../utils/i18n.js';
+import { Router } from '@vaadin/router';
 
 export class EmployeeTable extends LitElement {
     static properties = {
@@ -80,7 +81,8 @@ export class EmployeeTable extends LitElement {
               <td class="collapse">${emp.department}</td>
               <td class="collapse">${emp.position}</td>
               <td>
-                <a href="/edit/${emp.id}">${t('actions.edit')}</a>
+      
+                 <button @click=${() => Router.go('/edit/' + emp.id)}>${t('actions.edit')}</button>
               </td>
               <td>
                 <button @click=${() => this._deleteEmployee(emp)}>${t('actions.delete')}</button>
