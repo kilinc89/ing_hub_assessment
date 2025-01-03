@@ -18,12 +18,18 @@ export class EmployeeTable extends LitElement {
       border: 1px solid #ddd;
       padding: 12px;
       text-align: left;
+      color: #515269;
     }
 
     th {
       background-color: #f9f9f9;
       font-weight: bold;
       color: #f60;
+    }
+
+    td:first-child, td:nth-child(2) {
+      font-weight: 500;
+      color: #000;
     }
 
     tr:nth-child(even) {
@@ -61,6 +67,10 @@ export class EmployeeTable extends LitElement {
         });
     }
 
+    deleteEmployee(emp) {
+        this.dispatchEvent(new CustomEvent('delete-employee', { detail: emp }));
+    }
+
     render() {
         return html`
       <table>
@@ -94,7 +104,7 @@ export class EmployeeTable extends LitElement {
                  <button @click=${() => Router.go('/edit/' + emp.id)}>${t('actions.edit')}</button>
               </td>
               <td>
-                <button @click=${() => this._deleteEmployee(emp)}>${t('actions.delete')}</button>
+                <button @click=${() => this.deleteEmployee(emp)}>${t('actions.delete')}</button>
               </td>
             </tr>
           `)}
@@ -103,9 +113,6 @@ export class EmployeeTable extends LitElement {
     `;
     }
 
-    _deleteEmployee(emp) {
-        this.dispatchEvent(new CustomEvent('delete-employee', { detail: emp }));
-    }
 }
 
 customElements.define('employee-table', EmployeeTable); 

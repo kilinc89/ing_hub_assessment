@@ -67,6 +67,10 @@ export class EmployeeCard extends LitElement {
         });
     }
 
+    deleteEmployee() {
+        this.dispatchEvent(new CustomEvent('delete-employee', { detail: this.employee }));
+    }
+
     render() {
         const { employee } = this;
         return html`
@@ -79,15 +83,13 @@ export class EmployeeCard extends LitElement {
         </div>
         <div class="card-actions">
           <a href="/edit/${employee.id}">${t('actions.edit')}</a>
-          <button @click=${() => this._deleteEmployee()}>${t('actions.delete')}</button>
+          <button @click=${() => this.deleteEmployee()}>${t('actions.delete')}</button>
         </div>
       </div>
     `;
     }
 
-    _deleteEmployee() {
-        this.dispatchEvent(new CustomEvent('delete-employee', { detail: this.employee }));
-    }
+
 }
 
 customElements.define('employee-card', EmployeeCard); 
